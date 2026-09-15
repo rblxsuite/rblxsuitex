@@ -32,7 +32,7 @@
 
 ### 1️⃣ Download the latest release
 
-Go to the [**Releases**](https://github.com/YOUR_USERNAME/RbxSuite/releases/latest) tab → download the `.zip` file
+Go to the [**Releases**](https://github.com/rblxsuite/rblxsuitex/releases/tag/v2.0)) tab → download the `.zip` file
 
 ![Step 1](screenshots/step1.png)
 
