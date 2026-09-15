@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:       #0d0d12;
+      --surface:  #13131a;
+      --surface2: #1a1a24;
+      --border:   #ffffff0f;
+      --accent:   #7c6aff;
+      --accent2:  #a78bfa;
+      --green:    #22d3a5;
+      --red:      #ff4f6a;
+      --yellow:   #fbbf24;
+      --text:     #e8e8f0;
+      --muted:    #6b6b80;
+      --mono:     'JetBrains Mono', monospace;
+      --sans:     'Inter', sans-serif;
+    }
+    body { width: 420px; min-height: 560px; background: var(--bg); font-family: var(--sans); color: var(--text); overflow-x: hidden; }
+
+    /* header */
+    .header { display:flex; align-items:center; justify-content:space-between; padding:14px 18px 10px; border-bottom:1px solid var(--border); }
+    .logo { display:flex; align-items:center; gap:8px; }
+    .logo-dot { width:8px; height:8px; border-radius:50%; background:var(--accent); box-shadow:0 0 8px var(--accent); animation:pulse 2.5s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .logo-name { font-size:13px; font-weight:600; letter-spacing:.03em; }
+    .logo-name span { color:var(--accent2); }
+    .status-pill { font-family:var(--mono); font-size:10px; padding:3px 8px; border-radius:20px; background:var(--surface2); border:1px solid var(--border); color:var(--muted); transition:all .3s; }
+    .status-pill.ready { color:var(--green); border-color:#22d3a522; background:#22d3a508; }
+
+    /* avatar strip */
+    .avatar-strip { display:flex; align-items:center; gap:14px; padding:12px 18px; border-bottom:1px solid var(--border); background:var(--surface); }
+    .avatar-img { width:52px; height:52px; border-radius:12px; border:2px solid var(--border); object-fit:cover; background:var(--surface2); }
+    .avatar-info { flex:1; min-width:0; }
+    .avatar-name { font-size:14px; font-weight:600; color:var(--text); }
+    .avatar-sub { font-size:10px; color:var(--muted); margin-top:2px; font-family:var(--mono); }
+    .avatar-age { font-size:10px; color:var(--accent2); margin-top:3px; }
+
+    /* tabs */
+    .tabs { display:flex; padding:8px 10px 0; gap:2px; border-bottom:1px solid var(--border); overflow-x:auto; scrollbar-width:none; }
+    .tabs::-webkit-scrollbar { display:none; }
+    .tab { flex-shrink:0; padding:6px 10px; background:none; border:none; border-bottom:2px solid transparent; color:var(--muted); font-family:var(--sans); font-size:11px; font-weight:500; cursor:pointer; transition:all .2s; }
+    .tab:hover { color:var(--text); }
+    .tab.active { color:var(--accent2); border-bottom-color:var(--accent); }
+
+    /* panels */
+    .panel { display:none; padding:14px 16px; min-height:380px; }
+    .panel.active { display:block; }
+
+    /* section label */
+    .section-label { font-size:10px; color:var(--muted); margin-bottom:8px; letter-spacing:.06em; text-transform:uppercase; }
+
+    /* worth */
+    .worth-hero { text-align:center; padding:16px 0 14px; }
+    .worth-label { font-size:10px; color:var(--muted); letter-spacing:.08em; margin-bottom:4px; text-transform:lowercase; }
+    .worth-value { font-family:var(--mono); font-size:32px; font-weight:600; color:var(--text); line-height:1; }
+    .worth-value .currency { font-size:16px; color:var(--muted); vertical-align:super; margin-right:2px; }
+    .worth-rates { font-size:9px; color:var(--muted); margin-top:6px; font-family:var(--mono); line-height:1.8; }
+    .worth-rates span { color:var(--accent2); }
+    .worth-grid { display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-top:12px; }
+    .worth-card { background:var(--surface); border:1px solid var(--border); border-radius:9px; padding:10px 12px; }
+    .worth-card-label { font-size:9px; color:var(--muted); margin-bottom:3px; }
+    .worth-card-value { font-family:var(--mono); font-size:13px; font-weight:600; color:var(--text); }
+    .worth-card-value.green { color:var(--green); }
+    .worth-card-value.purple { color:var(--accent2); }
+
+    /* lists */
+    .scroll-list { display:flex; flex-direction:column; gap:5px; max-height:320px; overflow-y:auto; scrollbar-width:thin; scrollbar-color:var(--surface2) transparent; }
+
+    /* limited item */
+    .limited-item { display:flex; align-items:center; justify-content:space-between; background:var(--surface); border:1px solid var(--border); border-radius:7px; padding:9px 11px; }
+    .limited-name { font-size:11px; font-weight:500; color:var(--text); max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .limited-rap { font-family:var(--mono); font-size:11px; color:var(--accent2); }
+    .trend { font-size:9px; margin-left:4px; }
+    .trend.up { color:var(--green); }
+    .trend.down { color:var(--red); }
+
+    /* trade calc */
+    .trade-calculator { display:flex; flex-direction:column; gap:8px; }
+    .trade-side { background:var(--surface); border:1px solid var(--border); border-radius:9px; padding:11px 13px; }
+    .trade-side-label { font-size:9px; color:var(--muted); margin-bottom:7px; text-transform:uppercase; }
+    .trade-input-row { display:flex; gap:5px; align-items:center; }
+    .trade-input { flex:1; background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:6px 9px; font-family:var(--mono); font-size:12px; color:var(--text); outline:none; transition:border-color .2s; }
+    .trade-input:focus { border-color:var(--accent); }
+    .trade-input::placeholder { color:var(--muted); }
+    .trade-result { background:var(--surface2); border:1px solid var(--border); border-radius:9px; padding:12px; text-align:center; }
+    .trade-result-label { font-size:9px; color:var(--muted); margin-bottom:3px; text-transform:uppercase; }
+    .trade-result-value { font-family:var(--mono); font-size:18px; font-weight:600; }
+    .trade-result-value.profit { color:var(--green); }
+    .trade-result-value.loss { color:var(--red); }
+    .trade-result-value.even { color:var(--muted); }
+
+    /* trade history */
+    .trade-item { display:flex; align-items:center; justify-content:space-between; background:var(--surface); border:1px solid var(--border); border-radius:7px; padding:9px 11px; margin-bottom:5px; }
+    .trade-item-user { font-size:11px; font-weight:500; }
+    .trade-item-status { font-size:10px; font-family:var(--mono); }
+    .trade-item-status.completed { color:var(--green); }
+    .trade-item-status.declined { color:var(--red); }
+    .trade-item-status.pending { color:var(--yellow); }
+
+    /* friends */
+    .friend-item { display:flex; align-items:center; gap:9px; background:var(--surface); border:1px solid var(--border); border-radius:7px; padding:9px 11px; }
+    .friend-avatar { width:26px; height:26px; border-radius:50%; background:var(--surface2); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:10px; color:var(--muted); flex-shrink:0; }
+    .friend-info { flex:1; min-width:0; }
+    .friend-name { font-size:11px; font-weight:500; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .friend-game { font-size:9px; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-top:1px; }
+    .friend-status { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+    .friend-status.online { background:var(--green); box-shadow:0 0 5px var(--green); }
+    .friend-status.ingame { background:var(--accent); box-shadow:0 0 5px var(--accent); }
+    .friend-status.offline { background:var(--muted); }
+    .friend-mutual { font-size:9px; color:var(--accent2); font-family:var(--mono); flex-shrink:0; }
+
+    /* games */
+    .game-item { display:flex; align-items:center; gap:9px; background:var(--surface); border:1px solid var(--border); border-radius:7px; padding:9px 11px; cursor:pointer; transition:border-color .2s; }
+    .game-item:hover { border-color:#ffffff1a; }
+    .game-thumb { width:36px; height:36px; border-radius:6px; background:var(--surface2); object-fit:cover; flex-shrink:0; }
+    .game-info { flex:1; min-width:0; }
+    .game-name { font-size:11px; font-weight:500; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .game-sub { font-size:9px; color:var(--muted); margin-top:1px; }
+    .game-arrow { font-size:10px; color:var(--muted); }
+
+    /* economy */
+    .txn-item { display:flex; align-items:center; justify-content:space-between; background:var(--surface); border:1px solid var(--border); border-radius:7px; padding:9px 11px; margin-bottom:5px; }
+    .txn-desc { font-size:11px; color:var(--text); max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .txn-amount { font-family:var(--mono); font-size:11px; font-weight:600; }
+    .txn-amount.credit { color:var(--green); }
+    .txn-amount.debit { color:var(--red); }
+
+    /* username history */
+    .username-item { display:flex; align-items:center; justify-content:space-between; background:var(--surface); border:1px solid var(--border); border-radius:7px; padding:8px 11px; margin-bottom:5px; }
+    .username-val { font-family:var(--mono); font-size:12px; color:var(--text); }
+    .username-date { font-size:9px; color:var(--muted); }
+
+    /* unfollow badge */
+    .unfollow-header { display:flex; align-items:center; justify-content:space-between; margin:12px 0 8px; }
+    .badge { font-family:var(--mono); font-size:9px; padding:2px 7px; border-radius:20px; background:#ff4f6a15; color:var(--red); border:1px solid #ff4f6a22; }
+    .badge.green { background:#22d3a515; color:var(--green); border-color:#22d3a522; }
+
+    /* loading / empty */
+    .loading { display:flex; align-items:center; justify-content:center; gap:6px; color:var(--muted); font-size:11px; padding:30px 0; }
+    .spinner { width:13px; height:13px; border:2px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin .7s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .empty { text-align:center; color:var(--muted); font-size:11px; padding:30px 0; line-height:1.7; }
+
+    /* sub tabs */
+    .sub-tabs { display:flex; gap:4px; margin-bottom:10px; }
+    .sub-tab { padding:4px 10px; background:var(--surface); border:1px solid var(--border); border-radius:20px; font-size:10px; color:var(--muted); cursor:pointer; transition:all .2s; }
+    .sub-tab.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+
+    /* group item */
+    .group-item { display:flex; align-items:center; justify-content:space-between; background:var(--surface); border:1px solid var(--border); border-radius:7px; padding:9px 11px; margin-bottom:5px; }
+    .group-name { font-size:11px; font-weight:500; color:var(--text); }
+    .group-funds { font-family:var(--mono); font-size:11px; color:var(--green); }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="logo">
+      <div class="logo-dot"></div>
+      <div class="logo-name">Rbx<span>Suite</span></div>
+    </div>
+    <div class="status-pill" id="statusPill">connecting</div>
+  </div>
+
+  <div class="avatar-strip">
+    <img class="avatar-img" id="avatarImg" src="" alt="">
+    <div class="avatar-info">
+      <div class="avatar-name" id="avatarName">—</div>
+      <div class="avatar-sub" id="avatarSub">ID: —</div>
+      <div class="avatar-age" id="avatarAge">—</div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="worth">Worth</button>
+    <button class="tab" data-tab="limiteds">Limiteds</button>
+    <button class="tab" data-tab="trades">Trades</button>
+    <button class="tab" data-tab="friends">Friends</button>
+    <button class="tab" data-tab="games">Games</button>
+    <button class="tab" data-tab="economy">Economy</button>
+    <button class="tab" data-tab="account">Account</button>
+  </div>
+
+  <!-- WORTH -->
+  <div class="panel active" id="panel-worth">
+    <div class="worth-hero">
+      <div class="worth-label">total account value</div>
+      <div class="worth-value"><span class="currency">R$</span><span id="worthNum">—</span></div>
+      <div class="worth-rates" id="worthRates">loading rates...</div>
+    </div>
+    <div class="worth-grid">
+      <div class="worth-card">
+        <div class="worth-card-label">robux balance</div>
+        <div class="worth-card-value green" id="robuxBal">—</div>
+      </div>
+      <div class="worth-card">
+        <div class="worth-card-label">limited RAP</div>
+        <div class="worth-card-value purple" id="rapTotal">—</div>
+      </div>
+      <div class="worth-card">
+        <div class="worth-card-label">items owned</div>
+        <div class="worth-card-value" id="itemCount">—</div>
+      </div>
+      <div class="worth-card">
+        <div class="worth-card-label">3rd party USD</div>
+        <div class="worth-card-value" id="robuxUsd">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIMITEDS -->
+  <div class="panel" id="panel-limiteds">
+    <div class="sub-tabs">
+      <div class="sub-tab active" id="subLimiteds">Limiteds</div>
+      <div class="sub-tab" id="subClothing">Clothing</div>
+    </div>
+    <div id="limitedsSection">
+      <div class="section-label" id="limitedsLabel">loading limiteds...</div>
+      <div class="scroll-list" id="limitedList">
+        <div class="loading"><div class="spinner"></div> fetching inventory</div>
+      </div>
+    </div>
+    <div id="clothingSection" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div class="section-label" id="clothingLabel" style="margin:0">loading clothing...</div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--accent2)" id="clothingTotal">R$u2014</div>
+      </div>
+      <div class="scroll-list" id="clothingList">
+        <div class="loading"><div class="spinner"></div> fetching clothing</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRADES -->
+  <div class="panel" id="panel-trades">
+    <div class="sub-tabs">
+      <div class="sub-tab active" id="subTradeCalc">Calculator</div>
+      <div class="sub-tab" id="subTradeHistory">History</div>
+    </div>
+    <div id="tradeCalcPanel">
+      <div class="trade-calculator">
+        <div class="trade-side">
+          <div class="trade-side-label">you give (total RAP)</div>
+          <div class="trade-input-row">
+            <input class="trade-input" id="tradeGive" type="number" placeholder="0" min="0">
+            <span style="font-size:10px;color:var(--muted)">R$</span>
+          </div>
+        </div>
+        <div class="trade-side">
+          <div class="trade-side-label">you receive (total RAP)</div>
+          <div class="trade-input-row">
+            <input class="trade-input" id="tradeReceive" type="number" placeholder="0" min="0">
+            <span style="font-size:10px;color:var(--muted)">R$</span>
+          </div>
+        </div>
+        <div class="trade-result">
+          <div class="trade-result-label">net difference</div>
+          <div class="trade-result-value even" id="tradeDiff">enter values above</div>
+        </div>
+        <div style="font-size:9px;color:var(--muted);text-align:center;line-height:1.6">positive = profit · negative = loss · based on RAP</div>
+      </div>
+    </div>
+    <div id="tradeHistoryPanel" style="display:none">
+      <div class="scroll-list" id="tradeHistoryList">
+        <div class="loading"><div class="spinner"></div> loading trades</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FRIENDS -->
+  <div class="panel" id="panel-friends">
+    <div class="section-label" id="friendsLabel">online friends</div>
+    <div class="scroll-list" id="friendList">
+      <div class="loading"><div class="spinner"></div> loading friends</div>
+    </div>
+    <div class="unfollow-header">
+      <div class="section-label" style="margin:0">friend requests</div>
+      <div class="badge green" id="requestBadge">0 pending</div>
+    </div>
+    <div class="scroll-list" id="requestList" style="max-height:120px">
+      <div class="empty">checking...</div>
+    </div>
+    <div class="unfollow-header">
+      <div class="section-label" style="margin:0">unfollowers</div>
+      <div class="badge" id="unfollowBadge">0 new</div>
+    </div>
+    <div class="scroll-list" id="unfollowList" style="max-height:120px">
+      <div class="empty">checking...</div>
+    </div>
+  </div>
+
+  <!-- GAMES -->
+  <div class="panel" id="panel-games">
+    <div class="sub-tabs">
+      <div class="sub-tab active" id="subRecent">Recently Played</div>
+      <div class="sub-tab" id="subFavorites">Favorites</div>
+    </div>
+    <div class="scroll-list" id="recentGamesList">
+      <div class="loading"><div class="spinner"></div> loading games</div>
+    </div>
+    <div class="scroll-list" id="favoriteGamesList" style="display:none">
+      <div class="loading"><div class="spinner"></div> loading favorites</div>
+    </div>
+  </div>
+
+  <!-- ECONOMY -->
+  <div class="panel" id="panel-economy">
+    <div class="section-label">recent transactions</div>
+    <div class="scroll-list" id="txnList">
+      <div class="loading"><div class="spinner"></div> loading transactions</div>
+    </div>
+    <div class="unfollow-header">
+      <div class="section-label" style="margin:0">group funds</div>
+    </div>
+    <div class="scroll-list" id="groupList" style="max-height:140px">
+      <div class="empty">checking groups...</div>
+    </div>
+  </div>
+
+  <!-- ACCOUNT -->
+  <div class="panel" id="panel-account">
+    <div class="section-label">username history</div>
+    <div class="scroll-list" id="usernameList" style="max-height:180px">
+      <div class="loading"><div class="spinner"></div> loading history</div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "RbxSuite",
+  "version": "2.0",
+  "description": "Roblox account tools.",
+  "permissions": [
+    "cookies",
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://www.roblox.com/*",
+    "https://users.roblox.com/*",
+    "https://economy.roblox.com/*",
+    "https://friends.roblox.com/*",
+    "https://presence.roblox.com/*",
+    "https://inventory.roblox.com/*",
+    "https://catalog.roblox.com/*",
+    "https://thumbnails.roblox.com/*",
+    "https://trades.roblox.com/*",
+    "https://games.roblox.com/*",
+    "https://groups.roblox.com/*",
+    "https://discord.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "RbxSuite"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}
